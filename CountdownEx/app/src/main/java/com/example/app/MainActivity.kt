@@ -57,24 +57,26 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 Log.d(TAG, "$job is already active.")
                 resetJob()
             } else {
-                launch {
-                    Log.d(TAG, "$this coroutine is activated with $job")
-                    for (i in 10 downTo 1) { // 카운트다운
-                        Log.d(TAG, "$this coroutine is activated with $job")
-                        count.text = "Countdown $i ..." // UI 업데이트
-                        withContext(Dispatchers.Default) {
-                            Log.d(TAG, "$this coroutine is activated with $job")
-                            delay(1000) // heavy work ex. download...
-                        }
-                    }
-                    count.text = "Count Done!"
-                }
+                heavyProcess()
             }
             //job.start()
         }
         stop.setOnClickListener {
             resetJob()
         }
+    }
+
+    private fun heavyProcess() = launch {
+        Log.d(TAG, "$this coroutine is activated with $job")
+        for (i in 10 downTo 1) { // 카운트다운
+            Log.d(TAG, "$this coroutine is activated with $job")
+            tv_count.text = "Countdown $i ..." // UI 업데이트
+            withContext(Dispatchers.Default) {
+                Log.d(TAG, "$this coroutine is activated with $job")
+                delay(1000) // heavy work ex. download...
+            }
+        }
+        tv_count.text = "Count Done!"
     }
 
     private fun resetJob() {
