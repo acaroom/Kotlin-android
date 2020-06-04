@@ -9,12 +9,16 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlin.coroutines.CoroutineContext
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CoroutineScope {
 
     private val TAG = "COUNTDOWN"
     private lateinit var job: CompletableJob
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +59,10 @@ class MainActivity : AppCompatActivity() {
                 Log.d(TAG, "$job is already active.")
                 resetJob()
             } else {
-                CoroutineScope(Main + job).launch {
-                    Log.d(TAG, "$this coroutine is activated with job $job")
+                launch {
+                    Log.d(TAG, "$this coroutine is activated with $job")
                     for (i in 10 downTo 1) { // 카운트다운
+                        Log.d(TAG, "$this coroutine is activated with $job")
                         count.text = "Countdown $i ..." // UI 업데이트
                         delay(1000)
                     }
