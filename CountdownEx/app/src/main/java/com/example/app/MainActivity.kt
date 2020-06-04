@@ -7,8 +7,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlin.coroutines.CoroutineContext
 
 
@@ -64,7 +62,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                     for (i in 10 downTo 1) { // 카운트다운
                         Log.d(TAG, "$this coroutine is activated with $job")
                         count.text = "Countdown $i ..." // UI 업데이트
-                        delay(1000)
+                        withContext(Dispatchers.Default) {
+                            Log.d(TAG, "$this coroutine is activated with $job")
+                            delay(1000) // heavy work ex. download...
+                        }
                     }
                     count.text = "Count Done!"
                 }
