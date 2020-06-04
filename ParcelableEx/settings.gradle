@@ -1,0 +1,2 @@
+rootProject.name='ParcelableEx'
+include ':app'
